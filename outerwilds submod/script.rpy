@@ -1,3 +1,5 @@
+default persistent._mas_pm_wants_ow_adventure = False
+
 init -1 python:
     # Register the submod
     mas_submod_utils.Submod(

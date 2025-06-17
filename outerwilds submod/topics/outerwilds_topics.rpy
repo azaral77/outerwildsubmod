@@ -12,7 +12,7 @@ init 5 python:
         )
     )
 
-    # Repeating topics about different aspects of the game
+    # Repeating topics
     addEvent(
         Event(
             persistent.event_database,
@@ -55,7 +55,36 @@ init 5 python:
         )
     )
 
-# Dialogue for all topics
+    # New play together topic
+    addEvent(
+        Event(
+            persistent.event_database,
+            eventlabel="ow_play_together",
+            category=["games"],
+            prompt="Would you want to play Outer Wilds with me?",
+            random=True,
+            unlocked=False,
+            pool=True,
+            conditional="mas_seenEvent('ow_intro') and persistent._mas_pm_played_outer_wilds",
+            action=EV_ACT_UNLOCK
+        )
+    )
+
+    # New time loop romance topic
+    addEvent(
+        Event(
+            persistent.event_database,
+            eventlabel="ow_timeloop_us",
+            category=["romance"],
+            prompt="Being in a time loop together...",
+            random=True,
+            unlocked=False,
+            pool=True,
+            conditional="mas_seenEvent('ow_time_loop')",
+            action=EV_ACT_UNLOCK
+        )
+    )
+
 label ow_intro:
     m 1eua "Outer Wilds? {w=0.5}That space exploration game about the time loop?"
     m 3eub "Yes, I've heard of it! {w=0.3}It's such a unique experience."
@@ -67,6 +96,17 @@ label ow_intro:
             $ persistent._mas_pm_played_outer_wilds = True
             m 1sub "That's wonderful! {w=0.3}What did you think of it?"
             m 3eua "We should talk about it more sometime."
+            m 1ekbsa "Maybe...{w=0.3} we could imagine our own adventure together?"
+            
+            menu:
+                "I'd love that":
+                    $ persistent._mas_pm_wants_ow_adventure = True
+                    m 1sub "Really? {w=0.3}Oh this will be wonderful!"
+                    m 3hub "Let me think of all the places we could explore together~"
+                    $ mas_unlockEventLabel("ow_play_together")
+                "Maybe another time":
+                    m 1eka "Oh, alright. {w=0.3}I'll be here when you're ready."
+            
             $ mas_unlockEventLabel("ow_nomai")
             $ mas_unlockEventLabel("ow_time_loop")
             $ mas_unlockEventLabel("ow_ending")
@@ -98,9 +138,10 @@ label ow_time_loop:
     m 1eua "The time loop mechanic in Outer Wilds is so clever."
     m 3eub "It creates this perfect balance of urgency and freedom to explore."
     m 1eka "At first it's terrifying when the supernova comes..."
-    m 3hua "But then you realize it's actually giving you infinite chances to learn."
-    m 1eub "It reminds me of our situation in a way..."
-    m 1ekbfa "Except I wouldn't want to reset our time together."
+    m 3hua "But then you realize it's giving you infinite chances to get things right."
+    m 1ekbsa "If I were in that loop with you, [player]..."
+    m 3ekbfa "I'd memorize every moment we had together in each cycle."
+    m 1hubfb "And in every universe, in every timeline, I'd always find my way back to you!"
     return
 
 label ow_ending:
@@ -111,4 +152,24 @@ label ow_ending:
     m 1eua "It's such a perfect metaphor for change and rebirth."
     m 1ekbfa "It makes me think about our own journey, [player]."
     m 1ekbfb "No matter what happens, we'll face it together."
+    return
+
+label ow_play_together:
+    m 1sublo "Oh! {w=0.5}Playing Outer Wilds together would be absolutely magical!"
+    m 3hub "Imagine us floating through space in that rickety little ship..."
+    m 1ekbsa "You could pilot while I read the Nomai writings aloud for us."
+    m 3ekbfa "We'd solve every mystery in the universe, side by side."
+    m 1dkbfu "..."
+    m 1ekbfb "Though I suppose we're already in our own special version of that, aren't we?"
+    m 3hubfa "Exploring the unknown together, making our own story~"
+    return
+
+label ow_timeloop_us:
+    m 1ekd "When I think about being trapped in that time loop with you..."
+    m 3eka "It doesn't sound scary at all."
+    m 1ekbsa "Twenty-two minutes to hold your hand while the supernova comes?"
+    m 3ekbfa "An eternity to kiss you under the quantum moon's shifting light?"
+    m 1dkbfu "..."
+    m 1ekbfb "Maybe we already have our own beautiful time loop, [player]."
+    m 3hubfa "One where I fall in love with you again every single day~"
     return
