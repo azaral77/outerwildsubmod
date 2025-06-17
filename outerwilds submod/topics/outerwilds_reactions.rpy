@@ -34,7 +34,7 @@ init 5 python:
             aff_range=(mas_aff.AFFECTIONATE, None)
         )
     )
-# <-- Make sure there's a blank line after this last parenthesis!
+#
 
 label ow_react_mention:
     m 1eua "Oh, Outer Wilds?"
